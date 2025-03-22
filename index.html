@@ -14,8 +14,18 @@
         padding: 20px;
       }
 
-      textarea {
+      div {
+        display: flex;
         width: 90%;
+      }
+
+      .editorContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      textarea {
+        width: 80%;
         height: 150px;
         border: 1px solid #ccc;
         padding: 10px;
@@ -32,17 +42,19 @@
   </head>
   <body>
     <h2>Live HTML & CSS Editor</h2>
-
-    <label>HTML:</label>
-    <textarea id="html-editor"><div id="box">Target Box</div></textarea>
-
-    <label>CSS:</label>
-    <textarea id="css-editor">
+    <div>
+      <div class="editorContainer">
+        <label>HTML</label>
+        <textarea id="html-editor"><div id="box">Target Box</div></textarea>
+      </div>
+      <div class="editorContainer">
+        <label>CSS</label>
+        <textarea id="css-editor">
 #box { width: 200px; height: 200px; background: lightgray; border: 2px solid black; text-align: center; line-height: 200px; }</textarea
-    >
-
+        >
+      </div>
+    </div>
     <iframe id="preview"></iframe>
-
     <script>
       const htmlEditor = document.getElementById("html-editor");
       const cssEditor = document.getElementById("css-editor");
