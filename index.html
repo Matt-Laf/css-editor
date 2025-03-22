@@ -3,42 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Live CSS Editor</title>
+    <title>Live HTML & CSS Editor</title>
     <style>
       body {
         font-family: Arial, sans-serif;
         display: flex;
-        gap: 20px;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
         padding: 20px;
       }
 
-      #editor {
-        width: 300px;
-        height: 200px;
+      textarea {
+        width: 90%;
+        height: 150px;
         border: 1px solid #ccc;
         padding: 10px;
+        font-family: monospace;
       }
 
-      #box {
-        width: 200px;
-        height: 200px;
-        background-color: lightgray;
-        border: 2px solid black;
+      iframe {
+        width: 90%;
+        height: 300px;
+        border: 1px solid black;
+        background: white;
       }
     </style>
   </head>
   <body>
-    <textarea id="editor" placeholder="Type CSS here..."></textarea>
+    <h2>Live HTML & CSS Editor</h2>
 
-    <div id="box">Target Box</div>
+    <label>HTML:</label>
+    <textarea id="html-editor"><div id="box">Target Box</div></textarea>
+
+    <label>CSS:</label>
+    <textarea id="css-editor">
+#box { width: 200px; height: 200px; background: lightgray; border: 2px solid black; text-align: center; line-height: 200px; }</textarea
+    >
+
+    <iframe id="preview"></iframe>
 
     <script>
-      const editor = document.getElementById("editor");
-      const box = document.getElementById("box");
+      const htmlEditor = document.getElementById("html-editor");
+      const cssEditor = document.getElementById("css-editor");
+      const preview = document.getElementById("preview");
 
-      editor.addEventListener("input", () => {
-        box.style = editor.value; // Apply CSS directly
-      });
+      function updatePreview() {
+        const html = htmlEditor.value;
+        const css = `<style>${cssEditor.value}</style>`;
+        const doc = preview.contentDocument || preview.contentWindow.document;
+        doc.open();
+        doc.write(html + css);
+        doc.close();
+      }
+
+      htmlEditor.addEventListener("input", updatePreview);
+      cssEditor.addEventListener("input", updatePreview);
+
+      // Load initial content
+      updatePreview();
     </script>
   </body>
 </html>
