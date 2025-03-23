@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live HTML & CSS Editor</title>
+    <style>
+      :root {
+        --background-color: rgb(142, 222, 175);
+        --content-color: rgba(45, 156, 219, 1);
+        --padding-color: rgba(148, 208, 242, 1);
+        --border-color: rgba(242, 153, 74, 1);
+        --margin-color: rgba(242, 242, 242, 1);
+
+        --margin: 30px;
+        --border: 5px;
+        --padding: 20px;
+        --box-sizing: content-box;
+
+        --height: 200px;
+        --width: 300px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        font-family: "Roboto", sans-serif;
+        /* 100 (thin), 300 (light), 400 (regular) */
+        font-size: 14px; /* 1 rem */
+      }
+
+      body {
+        min-height: 50vh;
+        max-height: 50vh;
+        min-width: 100vw;
+        background: var(--background-color);
+        display: flex;
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 5rem;
+        font-weight: 100;
+        text-align: center;
+        padding: 2rem 1rem;
+      }
+
+      #container {
+        height: 500px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      form {
+        height: 100%;
+        width: 200px;
+        padding: 2rem 1rem;
+      }
+
+      form > * {
+        display: block;
+      }
+
+      form label {
+        margin-top: 1.8rem;
+        margin-bottom: 0.6rem;
+      }
+
+      form input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 5px;
+        background: darkgray;
+        outline: none;
+      }
+
+      form input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: black;
+        border: 1px solid gray;
+      }
+
+      form input[type="range"]::-moz-range-thumb {
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: black;
+        border: 1px solid gray;
+      }
+
+      form input[name="padding"]::-webkit-slider-thumb {
+        background: var(--padding-color);
+      }
+
+      form input[name="padding"]::-moz-range-thumb {
+        background: var(--padding-color);
+      }
+
+      form input[name="border"]::-webkit-slider-thumb {
+        background: var(--border-color);
+      }
+
+      form input[name="border"]::-moz-range-thumb {
+        background: var(--border-color);
+      }
+
+      form input[name="margin"]::-webkit-slider-thumb {
+        background: var(--margin-color);
+      }
+
+      form input[name="margin"]::-moz-range-thumb {
+        background: var(--margin-color);
+      }
+
+      #box-model {
+        position: relative;
+        min-width: 600px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #wrapper {
+        background: var(--margin-color);
+        display: inline-block;
+        padding: var(--margin); /* the "margin" */
+      }
+
+      #box {
+        box-sizing: var(--box-sizing);
+        height: var(--height);
+        width: var(--width);
+        padding: var(--padding);
+        border: solid orange;
+        border-width: var(--border);
+      }
+
+      #box {
+        /* method for coloring the padding, as seen at: https://stackoverflow.com/questions/14628601/can-i-add-background-color-only-for-padding*/
+        background-image: linear-gradient(
+            var(--content-color),
+            var(--content-color)
+          ),
+          linear-gradient(var(--padding-color), var(--padding-color));
+        background-clip: content-box, padding-box;
+      }
+
+      #box-model::before {
+        content: "height = 200px";
+        color: gray;
+        font-weight: 300;
+        position: absolute;
+        width: var(--height);
+        transform: rotate(-90deg);
+        text-align: center;
+        top: 48%;
+        right: -80px;
+        border-top: 1px solid gray;
+        padding-top: 0.5rem;
+      }
+
+      #box-model::after {
+        content: "width = 300px";
+        color: gray;
+        font-weight: 300;
+        position: absolute;
+        width: var(--width);
+        text-align: center;
+        bottom: 10px;
+        right: 25%;
+        border-top: 1px solid gray;
+        padding-top: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Understanding the Box Model</h1>
+
+    <div id="container">
+      <form id="form">
+        <label for="margin">margin</label>
+        <input
+          type="range"
+          name="margin"
+          min="0"
+          max="50"
+          value="30"
+          data-unit="px"
+          step="10"
+        />
+
+        <label for="border">border</label>
+        <input
+          type="range"
+          name="border"
+          min="0"
+          max="10"
+          value="5"
+          data-unit="px"
+          step="5"
+        />
+
+        <label for="padding">padding</label>
+        <input
+          type="range"
+          name="padding"
+          min="0"
+          max="30"
+          value="20"
+          data-unit="px"
+          step="10"
+        />
+
+        <label for="box-sizing">box-sizing</label>
+        <select name="box-sizing">
+          <option value="content-box">content-box</option>
+          <option value="border-box">border-box</option>
+        </select>
+      </form>
+
+      <div id="box-model">
+        <div id="wrapper">
+          <div id="box"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      var controls = document.querySelectorAll("form input, form select");
+
+      function updateFilters() {
+        //'this' is the input
+
+        //grab the data-unit value from the input
+        //if there isn't one, use an empty string (so never undefined)
+        var unit = this.dataset.unit || "";
+
+        //to update the CSS variables
+        //set the values as properties of the document (aka root)
+        //like >> :root { --varName = 15px; }
+        var varToSet = "--" + this.name;
+        var valueToSet = this.value + unit;
+        document.documentElement.style.setProperty(varToSet, valueToSet);
+
+        //display the value in a tooltip on the controls
+        this.title = this.value + unit;
+      }
+
+      controls.forEach(function (input) {
+        input.addEventListener("change", updateFilters);
+        input.addEventListener("mousemove", updateFilters);
+      });
+    </script>
+  </body>
+</html>
