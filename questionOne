@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live HTML & CSS Editor</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+      }
+
+      div {
+        display: flex;
+        width: 90%;
+      }
+
+      .editorContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      textarea {
+        width: 90%;
+        height: 150px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-family: monospace;
+        transition: background 0.3s ease;
+      }
+
+      iframe {
+        width: 90%;
+        height: 300px;
+        border: 1px solid black;
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Live HTML & CSS Editor</h2>
+    <div>
+      <div class="editorContainer">
+        <label>HTML:</label>
+        <textarea id="html-editor"></textarea>
+      </div>
+      <div class="editorContainer">
+        <label>CSS:</label>
+        <textarea id="css-editor"></textarea>
+      </div>
+    </div>
+
+    <iframe id="preview"></iframe>
+
+    <script>
+      const htmlEditor = document.getElementById("html-editor");
+      const cssEditor = document.getElementById("css-editor");
+      const preview = document.getElementById("preview");
+
+      const correctHtml = "<h1>Hello World</h1>";
+      const correctCss = ``;
+
+      function updatePreview() {
+        const html = htmlEditor.value.trim();
+        const css = `<style>${cssEditor.value.trim()}</style>`;
+        const doc = preview.contentDocument || preview.contentWindow.document;
+        doc.open();
+        doc.write(html + css);
+        doc.close();
+
+        checkAnswers();
+      }
+
+      function checkAnswers() {
+        if (htmlEditor.value.trim() === correctHtml) {
+          htmlEditor.style.background = "lightgreen";
+        } else {
+          htmlEditor.style.background = "white";
+        }
+
+        if (cssEditor.value.trim() === correctCss) {
+          cssEditor.style.background = "lightgreen";
+        } else {
+          cssEditor.style.background = "white";
+        }
+      }
+
+      htmlEditor.addEventListener("input", updatePreview);
+      cssEditor.addEventListener("input", updatePreview);
+
+      // Load initial content
+      updatePreview();
+    </script>
+  </body>
+</html>
